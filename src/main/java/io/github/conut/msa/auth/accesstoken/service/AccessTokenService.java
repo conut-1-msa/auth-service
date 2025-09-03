@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Map;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -19,11 +18,9 @@ public class AccessTokenService {
         this.jwtUtil = jwtUtil;
     }
 
-    public String generateAccessToken() {
-        String uuid = UUID.randomUUID().toString();
-
+    public String generateAccessToken(String userUuid) {
         Map<String, String> claims = Map.of(
-            "uuid", uuid
+            "uuid", userUuid
         );
         Date thirtyMinutesLater = Date.from(Instant.now().plus(30, ChronoUnit.MINUTES));
 
