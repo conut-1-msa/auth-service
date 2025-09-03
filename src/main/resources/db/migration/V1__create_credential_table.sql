@@ -1,0 +1,7 @@
+CREATE TABLE credential (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_uuid VARCHAR(36),
+    userid VARCHAR(20) NOT NULL,
+    password VARCHAR(60) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
