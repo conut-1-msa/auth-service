@@ -18,7 +18,7 @@ public class AuthService {
 
     public String login(LoginRequest loginRequest) {
         CredentialRow credentialRow = credentialService.selectByUserid(loginRequest.getUserid());
-        if (credentialRow == null || !credentialRow.getPassword().equals(credentialRow.getPassword())) {
+        if (credentialRow == null || !credentialRow.getPassword().equals(loginRequest.getPassword())) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         return accessTokenService.generateAccessToken(credentialRow.getUserUuid());
