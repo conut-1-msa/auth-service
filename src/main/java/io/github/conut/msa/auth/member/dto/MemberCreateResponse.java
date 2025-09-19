@@ -1,4 +1,4 @@
-package io.github.conut.msa.auth.client.dto;
+package io.github.conut.msa.auth.member.dto;
 
 import lombok.Data;
 
