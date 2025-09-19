@@ -1,7 +1,5 @@
 package io.github.conut.msa.auth.auth.service;
 
-import java.util.UUID;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -11,6 +9,7 @@ import io.github.conut.msa.auth.auth.dto.LoginRequest;
 import io.github.conut.msa.auth.auth.dto.RegisterRequest;
 import io.github.conut.msa.auth.credential.dto.CredentialRow;
 import io.github.conut.msa.auth.credential.service.CredentialService;
+import io.github.conut.msa.auth.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -18,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthService {
     private final AccessTokenService accessTokenService;
     private final CredentialService credentialService;
+    private final MemberService memberService;
 
     public String login(LoginRequest loginRequest) {
         CredentialRow credentialRow = credentialService.selectByUserid(loginRequest.getUserid());
@@ -28,7 +28,7 @@ public class AuthService {
     }
 
     public void register(RegisterRequest registerRequest) {
-        String uuid = UUID.randomUUID().toString();
+        String uuid = memberService.createMember(registerRequest.getNickname()).getUuid();
         credentialService.insert(uuid, registerRequest.getUserid(), registerRequest.getPassword());
     }
 }
