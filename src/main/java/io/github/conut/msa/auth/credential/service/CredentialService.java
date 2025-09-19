@@ -3,6 +3,7 @@ package io.github.conut.msa.auth.credential.service;
 import org.springframework.stereotype.Service;
 
 import io.github.conut.msa.auth.credential.dao.CredentialDAO;
+import io.github.conut.msa.auth.credential.dto.CredentialInsertParam;
 import io.github.conut.msa.auth.credential.dto.CredentialRow;
 import lombok.RequiredArgsConstructor;
 
@@ -13,5 +14,13 @@ public class CredentialService {
 
     public CredentialRow selectByUserid(String userid) {
         return credentialDAO.selectByUserid(userid);
+    }
+
+    public void insert(String userUuid, String userid, String password) {
+        CredentialInsertParam credentialInsertParam = new CredentialInsertParam();
+        credentialInsertParam.setUserUuid(userUuid);
+        credentialInsertParam.setUserid(userid);
+        credentialInsertParam.setPassword(password);
+        credentialDAO.insert(credentialInsertParam);
     }
 }
