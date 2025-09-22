@@ -44,4 +44,15 @@ public class AuthController {
         authService.register(registerRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout() {
+        ResponseCookie responseCookie = ResponseCookie.from("refreshToken", "")
+            .path("/")
+            .maxAge(0)
+            .build();
+        return ResponseEntity.ok()
+            .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
+            .build();
+    }
 }
