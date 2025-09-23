@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import io.github.conut.msa.auth.common.util.JwtUtil;
+import io.jsonwebtoken.Claims;
 
 @Service
 public class RefreshTokenService {
@@ -25,5 +26,9 @@ public class RefreshTokenService {
         Date twoWeeksLater = Date.from(Instant.now().plus(14, ChronoUnit.DAYS));
 
         return jwtUtil.generateToken(claims, twoWeeksLater);
+    }
+
+    public Claims parseRefreshToken(String refreshToken) {
+        return jwtUtil.parseToken(refreshToken);
     }
 }

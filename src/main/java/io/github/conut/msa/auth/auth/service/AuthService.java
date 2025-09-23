@@ -12,6 +12,7 @@ import io.github.conut.msa.auth.credential.dto.CredentialRow;
 import io.github.conut.msa.auth.credential.service.CredentialService;
 import io.github.conut.msa.auth.member.service.MemberService;
 import io.github.conut.msa.auth.refreshtoken.service.RefreshTokenService;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -36,5 +37,14 @@ public class AuthService {
     public void register(RegisterRequest registerRequest) {
         String uuid = memberService.createMember(registerRequest.getNickname()).getUuid();
         credentialService.insert(uuid, registerRequest.getUserid(), registerRequest.getPassword());
+    }
+
+    public String refreshAccessToken(String refreshToken) {
+        if (refreshToken == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+        Claims claims = refreshTokenService.parseRefreshToken(refreshToken);
+        String uuid = claims.get("uuid", String.class);
+        return accessTokenService.generateAccessToken(uuid);
     }
 }
