@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
+import io.jsonwebtoken.security.WeakKeyException;
 
 public class JwtUtilTests {
     private static final String SECRET = "jsonwebtokensecretkeyfortestcode";
@@ -48,5 +49,12 @@ public class JwtUtilTests {
         String token = differentJwtUtil.generateToken(claims, exp);
 
         assertThrows(SignatureException.class, () -> jwtUtil.parseToken(token));
+    }
+
+    @Test
+    void constructWithShortSecret_throwsWeakKeyException() {
+        String shortKey = "shortkey";
+
+        assertThrows(WeakKeyException.class, () -> new JwtUtil(shortKey));
     }
 }
