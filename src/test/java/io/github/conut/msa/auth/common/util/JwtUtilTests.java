@@ -30,7 +30,7 @@ public class JwtUtilTests {
     }
 
     @Test
-    void parseExpiredToken_throws() {
+    void parseExpiredToken_throwsExpiredJwtException() {
         Map<String, String> claims = Map.of("uuid", TEST_UUID);
         Date exp = Date.from(Instant.now().minusSeconds(5));
 
@@ -40,7 +40,7 @@ public class JwtUtilTests {
     }
 
     @Test
-    void signWithDifferentSecret_throws() {
+    void signWithDifferentSecret_throwsSignatureException() {
         Map<String, String> claims = Map.of("uuid", TEST_UUID);
         Date exp = Date.from(Instant.now().plusSeconds(60));
 
