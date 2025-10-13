@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import io.jsonwebtoken.security.WeakKeyException;
 
@@ -56,5 +57,12 @@ public class JwtUtilTests {
         String shortKey = "shortkey";
 
         assertThrows(WeakKeyException.class, () -> new JwtUtil(shortKey));
+    }
+
+    @Test
+    void parseMalformedToken_throwsMalformedJwtException() {
+        String malformedToken = "malformedToken";
+
+        assertThrows(MalformedJwtException.class, () -> jwtUtil.parseToken(malformedToken));
     }
 }
