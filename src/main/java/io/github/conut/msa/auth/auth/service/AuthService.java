@@ -1,5 +1,7 @@
 package io.github.conut.msa.auth.auth.service;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -29,7 +31,8 @@ public class AuthService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         AuthTokens authTokens = new AuthTokens();
-        authTokens.setAccessToken(accessTokenService.generateAccessToken(credentialRow.getUserUuid()));
+        List<String> roles = memberService.getMemberRoles(credentialRow.getUserUuid());
+        authTokens.setAccessToken(accessTokenService.generateAccessToken(credentialRow.getUserUuid(), roles));
         authTokens.setRefreshToken(refreshTokenService.generateRefreshToken(credentialRow.getUserUuid()));
         return authTokens;
     }
@@ -45,6 +48,7 @@ public class AuthService {
         }
         Claims claims = refreshTokenService.parseRefreshToken(refreshToken);
         String uuid = claims.get("uuid", String.class);
-        return accessTokenService.generateAccessToken(uuid);
+        List<String> roles = memberService.getMemberRoles(uuid);
+        return accessTokenService.generateAccessToken(uuid, roles);
     }
 }

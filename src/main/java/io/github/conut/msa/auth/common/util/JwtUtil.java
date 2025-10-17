@@ -17,7 +17,7 @@ public class JwtUtil {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(Map<String, String> claims, Date exp) {
+    public String generateToken(Map<String, Object> claims, Date exp) {
         return Jwts.builder().claims(claims).expiration(exp).signWith(secretKey).compact();
     }
 

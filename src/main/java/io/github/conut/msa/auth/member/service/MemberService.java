@@ -1,5 +1,7 @@
 package io.github.conut.msa.auth.member.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import io.github.conut.msa.auth.member.client.MemberClient;
@@ -16,5 +18,9 @@ public class MemberService {
         MemberCreateRequest memberCreateRequest = new MemberCreateRequest();
         memberCreateRequest.setNickname(nickname);
         return memberClient.createMember(memberCreateRequest);
+    }
+
+    public List<String> getMemberRoles(String memberUuid) {
+        return memberClient.getMemberRoles(memberUuid);
     }
 }

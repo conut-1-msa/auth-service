@@ -3,6 +3,7 @@ package io.github.conut.msa.auth.accesstoken.service;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,9 +19,10 @@ public class AccessTokenService {
         this.jwtUtil = jwtUtil;
     }
 
-    public String generateAccessToken(String userUuid) {
-        Map<String, String> claims = Map.of(
-            "uuid", userUuid
+    public String generateAccessToken(String userUuid, List<String> roles) {
+        Map<String, Object> claims = Map.of(
+            "uuid", userUuid,
+            "roles", roles
         );
         Date thirtyMinutesLater = Date.from(Instant.now().plus(30, ChronoUnit.MINUTES));
 

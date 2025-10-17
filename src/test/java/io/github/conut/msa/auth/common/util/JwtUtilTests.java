@@ -21,7 +21,7 @@ public class JwtUtilTests {
 
     @Test
     void generateAndParse_ok() {
-        Map<String, String> claims = Map.of("uuid", TEST_UUID);
+        Map<String, Object> claims = Map.of("uuid", TEST_UUID);
         Date exp = Date.from(Instant.now().plusSeconds(60));
 
         String token = jwtUtil.generateToken(claims, exp);
@@ -33,7 +33,7 @@ public class JwtUtilTests {
 
     @Test
     void parseExpiredToken_throwsExpiredJwtException() {
-        Map<String, String> claims = Map.of("uuid", TEST_UUID);
+        Map<String, Object> claims = Map.of("uuid", TEST_UUID);
         Date exp = Date.from(Instant.now().minusSeconds(5));
 
         String token = jwtUtil.generateToken(claims, exp);
@@ -43,7 +43,7 @@ public class JwtUtilTests {
 
     @Test
     void signWithDifferentSecret_throwsSignatureException() {
-        Map<String, String> claims = Map.of("uuid", TEST_UUID);
+        Map<String, Object> claims = Map.of("uuid", TEST_UUID);
         Date exp = Date.from(Instant.now().plusSeconds(60));
 
         JwtUtil differentJwtUtil = new JwtUtil("differentjsonwebtokensecretkeyfortestcode");
