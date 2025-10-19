@@ -1,0 +1,13 @@
+.git
+.gitattributes
+.gitignore
+
+.gradle
+.vscode
+bin
+build
+
+application-dev.yml
+application-test.yml
+.env
+.env.example
