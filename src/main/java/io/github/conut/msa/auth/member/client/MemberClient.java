@@ -13,9 +13,9 @@ import io.github.conut.msa.auth.member.dto.MemberCreateResponse;
 
 @FeignClient(name = "member-service", url = "${services.member.url}")
 public interface MemberClient {
-    @PostMapping("/member")
+    @PostMapping("/internal/member")
     MemberCreateResponse createMember(@RequestBody MemberCreateRequest memberCreateRequest);
 
-    @GetMapping("/member/roles")
+    @GetMapping("/internal/member/roles")
     List<String> getMemberRoles(@RequestHeader("X-User-UUID") String memberUuid);
 }
