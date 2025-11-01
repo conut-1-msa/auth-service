@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import io.github.conut.msa.auth.member.dto.MemberCreateRequest;
 import io.github.conut.msa.auth.member.dto.MemberCreateResponse;
 
-@FeignClient(name = "member-service", url = "${services.member.url}")
+@FeignClient(name = "member-service", url = "${services.member.url:}")
 public interface MemberClient {
     @PostMapping("/internal/member")
     MemberCreateResponse createMember(@RequestBody MemberCreateRequest memberCreateRequest);
