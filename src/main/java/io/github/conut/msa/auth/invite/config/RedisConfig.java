@@ -7,17 +7,19 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.github.conut.msa.auth.invite.vo.InviteCode;
 
 @Configuration
 public class RedisConfig {
     @Bean
-    public RedisTemplate<String, InviteCode> inviteCodeRedisTemplate(RedisConnectionFactory connectionFactory) {
+    public RedisTemplate<String, InviteCode> inviteCodeRedisTemplate(RedisConnectionFactory connectionFactory, ObjectMapper objectMapper) {
         RedisTemplate<String, InviteCode> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
 
         template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new Jackson2JsonRedisSerializer<>(InviteCode.class));
+        template.setValueSerializer(new Jackson2JsonRedisSerializer<>(objectMapper, InviteCode.class));
 
         return template;
     }
