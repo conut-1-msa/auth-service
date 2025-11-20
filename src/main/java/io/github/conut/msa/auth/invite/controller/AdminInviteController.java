@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/auth/invite")
 @RequiredArgsConstructor
-public class InviteController {
+public class AdminInviteController {
     private final InviteService inviteService;
 
     @PostMapping
