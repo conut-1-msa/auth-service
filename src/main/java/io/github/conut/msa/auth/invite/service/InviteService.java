@@ -3,6 +3,9 @@ package io.github.conut.msa.auth.invite.service;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -27,5 +30,17 @@ public class InviteService {
 
         inviteCodeRedisTemplate.opsForValue().set(key, inviteCode, remaining);
         return generatedCode;
+    }
+
+    public List<InviteCode> getInviteCodeList() {
+        Set<String> keys = inviteCodeRedisTemplate.keys("invite:code:*");
+        ArrayList<InviteCode> list = new ArrayList<>();
+        for (var key: keys) {
+            InviteCode inviteCode = inviteCodeRedisTemplate.opsForValue().get(key);
+            if (inviteCode != null) {
+                list.add(inviteCode);
+            }
+        }
+        return list;
     }
 }
