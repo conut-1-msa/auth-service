@@ -43,4 +43,9 @@ public class InviteService {
         }
         return list;
     }
+
+    public InviteCode getAndDeleteInviteCode(String inviteCode) {
+        String key = "invite:code:" + inviteCode;
+        return inviteCodeRedisTemplate.opsForValue().getAndDelete(key);
+    }
 }

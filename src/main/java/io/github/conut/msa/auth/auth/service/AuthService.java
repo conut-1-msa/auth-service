@@ -12,6 +12,8 @@ import io.github.conut.msa.auth.auth.dto.LoginRequest;
 import io.github.conut.msa.auth.auth.dto.RegisterRequest;
 import io.github.conut.msa.auth.credential.dto.CredentialRow;
 import io.github.conut.msa.auth.credential.service.CredentialService;
+import io.github.conut.msa.auth.invite.service.InviteService;
+import io.github.conut.msa.auth.invite.vo.InviteCode;
 import io.github.conut.msa.auth.member.service.MemberService;
 import io.github.conut.msa.auth.refreshtoken.service.RefreshTokenService;
 import io.jsonwebtoken.Claims;
@@ -24,6 +26,7 @@ public class AuthService {
     private final RefreshTokenService refreshTokenService;
     private final CredentialService credentialService;
     private final MemberService memberService;
+    private final InviteService inviteService;
 
     public AuthTokens login(LoginRequest loginRequest) {
         CredentialRow credentialRow = credentialService.selectByUserid(loginRequest.getUserid());
@@ -38,6 +41,10 @@ public class AuthService {
     }
 
     public void register(RegisterRequest registerRequest) {
+        InviteCode inviteCode = inviteService.getAndDeleteInviteCode(registerRequest.getInviteCode());
+        if (inviteCode == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
         String uuid = memberService.createMember(registerRequest.getNickname()).getUuid();
         credentialService.insert(uuid, registerRequest.getUserid(), registerRequest.getPassword());
     }

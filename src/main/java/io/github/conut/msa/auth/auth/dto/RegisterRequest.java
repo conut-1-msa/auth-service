@@ -7,4 +7,5 @@ public class RegisterRequest {
     private String userid;
     private String password;
     private String nickname;
+    private String inviteCode;
 }
