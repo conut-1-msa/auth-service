@@ -1,5 +1,5 @@
 # Build stage
-FROM openjdk:17-jdk-slim AS build
+FROM eclipse-temurin:17-jdk-alpine AS build
 WORKDIR /app
 COPY . .
 RUN ./gradlew clean build -x test
