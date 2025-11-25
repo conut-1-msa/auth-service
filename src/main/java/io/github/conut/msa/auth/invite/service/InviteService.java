@@ -10,6 +10,7 @@ import java.util.Set;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import io.github.conut.msa.auth.invite.dto.CreateInviteCodeRequest;
 import io.github.conut.msa.auth.invite.util.InviteCodeGenerator;
 import io.github.conut.msa.auth.invite.vo.InviteCode;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +21,16 @@ public class InviteService {
     private final RedisTemplate<String, InviteCode> inviteCodeRedisTemplate;
     private final InviteCodeGenerator inviteCodeGenerator;
 
-    public String createInviteCode() {
+    public String createInviteCode(CreateInviteCodeRequest createInviteCodeRequest) {
         String generatedCode = inviteCodeGenerator.generate();
         Instant now = Instant.now();
 
         String key = "invite:code:" + generatedCode;
-        InviteCode inviteCode = new InviteCode(generatedCode, "test", now.plus(7, ChronoUnit.DAYS));
+        InviteCode inviteCode = new InviteCode(
+            generatedCode,
+            createInviteCodeRequest.getDescription(),
+            now.plus(7, ChronoUnit.DAYS)
+        );
         Duration remaining = Duration.between(now, inviteCode.expiresAt());
 
         inviteCodeRedisTemplate.opsForValue().set(key, inviteCode, remaining);

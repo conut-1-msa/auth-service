@@ -5,9 +5,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.github.conut.msa.auth.invite.dto.CreateInviteCodeRequest;
 import io.github.conut.msa.auth.invite.service.InviteService;
 import lombok.RequiredArgsConstructor;
 
@@ -19,8 +21,8 @@ public class AdminInviteController {
     private final InviteService inviteService;
 
     @PostMapping
-    public ResponseEntity<?> createInviteCode() {
-        return ResponseEntity.status(HttpStatus.CREATED).body(inviteService.createInviteCode());
+    public ResponseEntity<?> createInviteCode(@RequestBody CreateInviteCodeRequest createInviteCodeRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(inviteService.createInviteCode(createInviteCodeRequest));
     }
 
     @GetMapping("/list")
