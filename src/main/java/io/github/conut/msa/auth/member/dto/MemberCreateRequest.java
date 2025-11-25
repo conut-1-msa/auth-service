@@ -5,4 +5,5 @@ import lombok.Data;
 @Data
 public class MemberCreateRequest {
     private String nickname;
+    private String description;
 }

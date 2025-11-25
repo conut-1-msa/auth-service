@@ -45,7 +45,12 @@ public class AuthService {
         if (inviteCode == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        String uuid = memberService.createMember(registerRequest.getNickname()).getUuid();
+        String uuid = memberService
+            .createMember(
+                registerRequest.getNickname(),
+                inviteCode.description()
+            )
+            .getUuid();
         credentialService.insert(uuid, registerRequest.getUserid(), registerRequest.getPassword());
     }
 

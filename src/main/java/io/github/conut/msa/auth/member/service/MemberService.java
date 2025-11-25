@@ -14,9 +14,10 @@ import lombok.RequiredArgsConstructor;
 public class MemberService {
     private final MemberClient memberClient;
 
-    public MemberCreateResponse createMember(String nickname) {
+    public MemberCreateResponse createMember(String nickname, String description) {
         MemberCreateRequest memberCreateRequest = new MemberCreateRequest();
         memberCreateRequest.setNickname(nickname);
+        memberCreateRequest.setDescription(description);
         return memberClient.createMember(memberCreateRequest);
     }
 
