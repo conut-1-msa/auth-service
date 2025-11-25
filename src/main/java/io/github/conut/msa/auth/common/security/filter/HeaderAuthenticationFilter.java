@@ -23,11 +23,15 @@ public class HeaderAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String userUuid = request.getHeader("X-User-UUID");
         String userRoles = request.getHeader("X-User-Roles");
-        if (userUuid != null && userRoles != null) {
+        if (userUuid != null) {
             List<GrantedAuthority> authorities = new ArrayList<>();
-            for (var userRole: userRoles.split(",")) {
-                SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userRole);
-                authorities.add(authority);
+            if (userRoles != null) {
+                for (var userRole: userRoles.split(",")) {
+                    if (!userRole.isBlank()) {
+                        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userRole);
+                        authorities.add(authority);
+                    }
+                }
             }
             UsernamePasswordAuthenticationToken auth =
                 new UsernamePasswordAuthenticationToken(userUuid, null, authorities);
