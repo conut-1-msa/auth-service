@@ -6,6 +6,7 @@
 .vscode
 bin
 build
+keys
 
 application-dev.yml
 application-test.yml

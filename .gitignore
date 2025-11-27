@@ -39,3 +39,4 @@ out/
 .env
 application-dev.yml
 application-test.yml
+access_private.pem

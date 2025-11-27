@@ -1,5 +1,6 @@
 package io.github.conut.msa.auth.accesstoken.service;
 
+import java.security.PrivateKey;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -9,14 +10,14 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import io.github.conut.msa.auth.common.util.JwtUtil;
+import io.jsonwebtoken.Jwts;
 
 @Service
 public class AccessTokenService {
-    private final JwtUtil jwtUtil;
+    private final PrivateKey accessTokenPrivateKey;
 
-    public AccessTokenService(@Qualifier("accessJwtUtil") JwtUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
+    public AccessTokenService(@Qualifier("accessTokenPrivateKey") PrivateKey accessTokenPrivateKey) {
+        this.accessTokenPrivateKey = accessTokenPrivateKey;
     }
 
     public String generateAccessToken(String userUuid, List<String> roles) {
@@ -26,6 +27,10 @@ public class AccessTokenService {
         );
         Date thirtyMinutesLater = Date.from(Instant.now().plus(30, ChronoUnit.MINUTES));
 
-        return jwtUtil.generateToken(claims, thirtyMinutesLater);
+        return Jwts.builder()
+            .claims(claims)
+            .expiration(thirtyMinutesLater)
+            .signWith(accessTokenPrivateKey, Jwts.SIG.RS256)
+            .compact();
     }
 }
