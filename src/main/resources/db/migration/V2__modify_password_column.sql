@@ -1,0 +1,2 @@
+ALTER TABLE credential
+MODIFY password VARCHAR(200) NOT NULL;

@@ -3,6 +3,7 @@ package io.github.conut.msa.auth.auth.service;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -27,10 +28,11 @@ public class AuthService {
     private final CredentialService credentialService;
     private final MemberService memberService;
     private final InviteService inviteService;
+    private final PasswordEncoder passwordEncoder;
 
     public AuthTokens login(LoginRequest loginRequest) {
         CredentialRow credentialRow = credentialService.selectByUserid(loginRequest.getUserid());
-        if (credentialRow == null || !credentialRow.getPassword().equals(loginRequest.getPassword())) {
+        if (credentialRow == null || !passwordEncoder.matches(loginRequest.getPassword(), credentialRow.getPassword())) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         AuthTokens authTokens = new AuthTokens();
@@ -51,7 +53,11 @@ public class AuthService {
                 inviteCode.description()
             )
             .getUuid();
-        credentialService.insert(uuid, registerRequest.getUserid(), registerRequest.getPassword());
+        credentialService.insert(
+            uuid,
+            registerRequest.getUserid(),
+            passwordEncoder.encode(registerRequest.getPassword())
+        );
     }
 
     public String refreshAccessToken(String refreshToken) {
