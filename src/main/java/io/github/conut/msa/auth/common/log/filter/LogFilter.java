@@ -17,15 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Order(1)
 public class LogFilter extends OncePerRequestFilter {
-    private static final String TRACE_ID_HEADER = "X-Trace-Id";
-    private static final String TRACE_ID_KEY = "traceId";
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String traceId = request.getHeader(TRACE_ID_HEADER);
-        MDC.put(TRACE_ID_KEY, traceId);
-
         try {
             log.info("Request: {} {}",
                 request.getMethod(),
@@ -36,7 +30,6 @@ public class LogFilter extends OncePerRequestFilter {
             log.info("Response: {}",
                 response.getStatus()
             );
-            MDC.remove(TRACE_ID_KEY);
         }
     }
 }
