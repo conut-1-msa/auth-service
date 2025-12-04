@@ -2,7 +2,6 @@ package io.github.conut.msa.auth.common.log.filter;
 
 import java.io.IOException;
 
-import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
