@@ -11,11 +11,13 @@ import io.github.conut.msa.auth.accesstoken.service.AccessTokenService;
 import io.github.conut.msa.auth.auth.dto.AuthTokens;
 import io.github.conut.msa.auth.auth.dto.LoginRequest;
 import io.github.conut.msa.auth.auth.dto.RegisterRequest;
+import io.github.conut.msa.auth.auth.exception.InvalidCredentialException;
 import io.github.conut.msa.auth.credential.dto.CredentialRow;
 import io.github.conut.msa.auth.credential.service.CredentialService;
 import io.github.conut.msa.auth.invite.service.InviteService;
 import io.github.conut.msa.auth.invite.vo.InviteCode;
 import io.github.conut.msa.auth.member.service.MemberService;
+import io.github.conut.msa.auth.refreshtoken.exception.RefreshTokenMissingException;
 import io.github.conut.msa.auth.refreshtoken.service.RefreshTokenService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +35,7 @@ public class AuthService {
     public AuthTokens login(LoginRequest loginRequest) {
         CredentialRow credentialRow = credentialService.selectByUserid(loginRequest.getUserid());
         if (credentialRow == null || !passwordEncoder.matches(loginRequest.getPassword(), credentialRow.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new InvalidCredentialException();
         }
         AuthTokens authTokens = new AuthTokens();
         List<String> roles = memberService.getMemberRoles(credentialRow.getUserUuid());
@@ -62,7 +64,7 @@ public class AuthService {
 
     public String refreshAccessToken(String refreshToken) {
         if (refreshToken == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            throw new RefreshTokenMissingException();
         }
         Claims claims = refreshTokenService.parseRefreshToken(refreshToken);
         String uuid = claims.get("uuid", String.class);
