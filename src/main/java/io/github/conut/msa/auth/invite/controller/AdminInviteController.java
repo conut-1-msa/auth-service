@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.github.conut.msa.auth.invite.dto.CreateInviteCodeRequest;
 import io.github.conut.msa.auth.invite.service.InviteService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -21,7 +22,7 @@ public class AdminInviteController {
     private final InviteService inviteService;
 
     @PostMapping
-    public ResponseEntity<?> createInviteCode(@RequestBody CreateInviteCodeRequest createInviteCodeRequest) {
+    public ResponseEntity<?> createInviteCode(@RequestBody @Valid CreateInviteCodeRequest createInviteCodeRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(inviteService.createInviteCode(createInviteCodeRequest));
     }
 
