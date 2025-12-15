@@ -9,4 +9,5 @@ import io.github.conut.msa.auth.credential.dto.CredentialRow;
 public interface CredentialDAO {
     CredentialRow selectActiveCredentialByUserid(String userid);
     void insert(CredentialInsertParam credentialInsertParam);
+    boolean isActive(String userUuid);
 }

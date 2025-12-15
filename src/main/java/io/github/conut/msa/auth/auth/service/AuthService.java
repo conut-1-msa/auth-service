@@ -13,6 +13,7 @@ import io.github.conut.msa.auth.accesstoken.service.AccessTokenService;
 import io.github.conut.msa.auth.auth.dto.AuthTokens;
 import io.github.conut.msa.auth.auth.dto.LoginRequest;
 import io.github.conut.msa.auth.auth.dto.RegisterRequest;
+import io.github.conut.msa.auth.auth.exception.CredentialNotActiveException;
 import io.github.conut.msa.auth.auth.exception.InvalidCredentialException;
 import io.github.conut.msa.auth.credential.dto.CredentialRow;
 import io.github.conut.msa.auth.credential.service.CredentialService;
@@ -71,6 +72,9 @@ public class AuthService {
         }
         Claims claims = refreshTokenService.parseRefreshToken(refreshToken);
         String uuid = claims.get("uuid", String.class);
+        if (!credentialService.isActive(uuid)) {
+            throw new CredentialNotActiveException();
+        }
         List<String> roles = memberService.getMemberRoles(uuid);
         return accessTokenService.generateAccessToken(uuid, roles);
     }

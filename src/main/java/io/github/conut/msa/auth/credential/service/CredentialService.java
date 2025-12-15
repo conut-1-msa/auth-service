@@ -23,4 +23,8 @@ public class CredentialService {
         credentialInsertParam.setPassword(password);
         credentialDAO.insert(credentialInsertParam);
     }
+
+    public boolean isActive(String userUuid) {
+        return credentialDAO.isActive(userUuid);
+    }
 }

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import io.github.conut.msa.auth.auth.exception.CredentialNotActiveException;
 import io.github.conut.msa.auth.auth.exception.InvalidCredentialException;
 
 @RestControllerAdvice
@@ -19,6 +20,18 @@ public class AuthExceptionHandler {
                     "status", HttpStatus.UNAUTHORIZED.value(),
                     "error", "Unauthorized",
                     "message", exception.getMessage()
+                )
+            );
+    }
+
+    @ExceptionHandler(CredentialNotActiveException.class)
+    public ResponseEntity<?> handleCredentialNotActiveException(CredentialNotActiveException exception) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            .body(
+                Map.of(
+                    "status", HttpStatus.UNAUTHORIZED.value(),
+                    "error", "Unauthorized",
+                    "message", "Unauthorized"
                 )
             );
     }
