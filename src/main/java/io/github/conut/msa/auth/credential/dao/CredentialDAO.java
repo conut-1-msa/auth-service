@@ -7,6 +7,6 @@ import io.github.conut.msa.auth.credential.dto.CredentialRow;
 
 @Mapper
 public interface CredentialDAO {
-    CredentialRow selectByUserid(String userid);
+    CredentialRow selectActiveCredentialByUserid(String userid);
     void insert(CredentialInsertParam credentialInsertParam);
 }

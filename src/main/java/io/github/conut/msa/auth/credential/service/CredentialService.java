@@ -12,8 +12,8 @@ import lombok.RequiredArgsConstructor;
 public class CredentialService {
     private final CredentialDAO credentialDAO;
 
-    public CredentialRow selectByUserid(String userid) {
-        return credentialDAO.selectByUserid(userid);
+    public CredentialRow selectActiveCredentialByUserid(String userid) {
+        return credentialDAO.selectActiveCredentialByUserid(userid);
     }
 
     public void insert(String userUuid, String userid, String password) {

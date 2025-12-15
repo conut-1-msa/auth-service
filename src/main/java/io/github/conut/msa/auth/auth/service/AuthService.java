@@ -35,7 +35,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     public AuthTokens login(LoginRequest loginRequest) {
-        CredentialRow credentialRow = credentialService.selectByUserid(loginRequest.getUserid());
+        CredentialRow credentialRow = credentialService.selectActiveCredentialByUserid(loginRequest.getUserid());
         if (credentialRow == null || !passwordEncoder.matches(loginRequest.getPassword(), credentialRow.getPassword())) {
             throw new InvalidCredentialException();
         }
