@@ -62,6 +62,10 @@ public class AuthService {
             registerRequest.getNickname(),
             inviteCode.description()
         );
+        int updated = credentialService.activateCredentialByUserUuid(uuid);
+        if (updated != 1) {
+            throw new IllegalStateException("Failed to activate credential for user UUID: " + uuid);
+        }
     }
 
     public String refreshAccessToken(String refreshToken) {

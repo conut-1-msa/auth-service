@@ -24,6 +24,14 @@ public class CredentialService {
         credentialDAO.insert(credentialInsertParam);
     }
 
+    public int activateCredentialByUserUuid(String userUuid) {
+        int updated = credentialDAO.activateCredentialByUserUuid(userUuid);
+        if (updated > 1) {
+            throw new IllegalStateException("Multiple credentials activated for a single user UUID: " + userUuid);
+        }
+        return updated;
+    }
+
     public boolean isActive(String userUuid) {
         return credentialDAO.isActive(userUuid);
     }
