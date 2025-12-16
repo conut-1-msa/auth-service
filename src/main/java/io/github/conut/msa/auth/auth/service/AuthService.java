@@ -6,7 +6,6 @@ import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import io.github.conut.msa.auth.accesstoken.service.AccessTokenService;
@@ -47,7 +46,6 @@ public class AuthService {
         return authTokens;
     }
 
-    @Transactional
     public void register(RegisterRequest registerRequest) {
         InviteCode inviteCode = inviteService.getAndDeleteInviteCode(registerRequest.getInviteCode());
         if (inviteCode == null) {
