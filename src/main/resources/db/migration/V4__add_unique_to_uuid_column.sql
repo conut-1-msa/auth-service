@@ -1,0 +1,2 @@
+ALTER TABLE credential
+MODIFY user_uuid VARCHAR(36) NOT NULL UNIQUE;
