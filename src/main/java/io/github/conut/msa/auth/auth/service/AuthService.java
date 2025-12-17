@@ -3,10 +3,8 @@ package io.github.conut.msa.auth.auth.service;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import io.github.conut.msa.auth.accesstoken.service.AccessTokenService;
 import io.github.conut.msa.auth.auth.dto.AuthTokens;
@@ -48,9 +46,6 @@ public class AuthService {
 
     public void register(RegisterRequest registerRequest) {
         InviteCode inviteCode = inviteService.getAndDeleteInviteCode(registerRequest.getInviteCode());
-        if (inviteCode == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
         String uuid = UUID.randomUUID().toString();
         credentialService.insert(
             uuid,

@@ -11,6 +11,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import io.github.conut.msa.auth.invite.dto.CreateInviteCodeRequest;
+import io.github.conut.msa.auth.invite.exception.InviteCodeNotFoundException;
 import io.github.conut.msa.auth.invite.util.InviteCodeGenerator;
 import io.github.conut.msa.auth.invite.vo.InviteCode;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,10 @@ public class InviteService {
 
     public InviteCode getAndDeleteInviteCode(String inviteCode) {
         String key = "invite:code:" + inviteCode;
-        return inviteCodeRedisTemplate.opsForValue().getAndDelete(key);
+        InviteCode inviteCodeValue = inviteCodeRedisTemplate.opsForValue().getAndDelete(key);
+        if (inviteCodeValue == null) {
+            throw new InviteCodeNotFoundException();
+        }
+        return inviteCodeValue;
     }
 }
