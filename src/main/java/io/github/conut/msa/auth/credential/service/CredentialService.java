@@ -16,6 +16,10 @@ public class CredentialService {
         return credentialDAO.selectActiveCredentialByUserid(userid);
     }
 
+    public boolean existsByUserid(String userid) {
+        return credentialDAO.existsByUserid(userid);
+    }
+
     public void insert(String userUuid, String userid, String password) {
         CredentialInsertParam credentialInsertParam = new CredentialInsertParam();
         credentialInsertParam.setUserUuid(userUuid);

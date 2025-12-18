@@ -44,6 +44,10 @@ public class AuthService {
         return authTokens;
     }
 
+    public boolean isUseridAvailable(String userid) {
+        return credentialService.existsByUserid(userid);
+    }
+
     public void register(RegisterRequest registerRequest) {
         InviteCode inviteCode = inviteService.getAndDeleteInviteCode(registerRequest.getInviteCode());
         String uuid = UUID.randomUUID().toString();

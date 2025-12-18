@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +40,11 @@ public class PublicAuthController {
         return ResponseEntity.ok()
             .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
             .body(Map.of("accessToken", authTokens.getAccessToken()));
+    }
+
+    @GetMapping("/userid/{userid}/available")
+    public ResponseEntity<?> isUseridAvailable(@PathVariable String userid) {
+        return ResponseEntity.ok(authService.isUseridAvailable(userid));
     }
 
     @PostMapping("/register")
