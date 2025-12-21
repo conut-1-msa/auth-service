@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.github.conut.msa.auth.infra.outbox.dao.OutboxDAO">
+    <insert id="insertBatch">
+        INSERT INTO outbox (event_id, aggregate_type, aggregate_id, event_type, payload)
+        VALUES
+        <foreach collection="outboxRows" item="row" separator=",">
+            (
+                #{row.eventId},
+                #{row.aggregateType},
+                #{row.aggregateId},
+                #{row.eventType},
+                #{row.payload}
+            )
+        </foreach>
+    </insert>
+</mapper>

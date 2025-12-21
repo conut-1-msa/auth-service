@@ -1,5 +1,7 @@
 package io.github.conut.msa.auth.credential.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import io.github.conut.msa.auth.credential.dto.CredentialInsertParam;
@@ -12,4 +14,7 @@ public interface CredentialDAO {
     void insert(CredentialInsertParam credentialInsertParam);
     int activateCredentialByUserUuid(String userUuid);
     boolean isActive(String userUuid);
+    int failPendingCredentialsWithBatchId(String batchId);
+    List<CredentialRow> selectByBatchId(String batchId);
+    int clearBatchId(String batchId);
 }
