@@ -17,4 +17,18 @@
             )
         </foreach>
     </insert>
+    <select id="selectUnpublished">
+        SELECT id, aggregate_id, event_type, payload
+        FROM outbox
+        WHERE published_at IS NULL
+        ORDER BY id
+        LIMIT 100
+        FOR UPDATE SKIP LOCKED
+    </select>
+    <update id="markPublished">
+        UPDATE outbox
+        SET published_at = NOW()
+        WHERE id = #{id}
+        AND published_at IS NULL
+    </update>
 </mapper>
