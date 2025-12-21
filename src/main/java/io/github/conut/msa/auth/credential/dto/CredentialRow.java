@@ -10,5 +10,8 @@ public class CredentialRow {
     private String userUuid;
     private String userid;
     private String password;
+    private String status;
     private LocalDateTime createdAt;
+    private LocalDateTime failedAt;
+    private String batchId;
 }
