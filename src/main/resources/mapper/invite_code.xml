@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.github.conut.msa.auth.invite.dao.InviteCodeDAO">
+    <insert id="insertInviteCode">
+        INSERT INTO invite_code (code, description, expires_at)
+        VALUES (#{code}, #{description}, #{expiresAt})
+    </insert>
+    <select id="selectInviteCodes">
+        SELECT
+            id,
+            code,
+            description,
+            CASE
+                WHEN status = 'UNUSED' AND expires_at &lt; NOW() THEN 'EXPIRED'
+                ELSE status
+            END AS status,
+            expires_at
+        FROM invite_code
+        ORDER BY id DESC
+    </select>
+</mapper>

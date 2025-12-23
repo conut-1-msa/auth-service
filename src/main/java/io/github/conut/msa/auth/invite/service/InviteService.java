@@ -1,17 +1,17 @@
 package io.github.conut.msa.auth.invite.service;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import io.github.conut.msa.auth.invite.dao.InviteCodeDAO;
+import io.github.conut.msa.auth.invite.dao.param.CreateInviteCodeParam;
 import io.github.conut.msa.auth.invite.dto.CreateInviteCodeRequest;
 import io.github.conut.msa.auth.invite.exception.InviteCodeNotFoundException;
+import io.github.conut.msa.auth.invite.query.InviteCodeListItem;
 import io.github.conut.msa.auth.invite.util.InviteCodeGenerator;
 import io.github.conut.msa.auth.invite.vo.InviteCode;
 import lombok.RequiredArgsConstructor;
@@ -21,33 +21,23 @@ import lombok.RequiredArgsConstructor;
 public class InviteService {
     private final RedisTemplate<String, InviteCode> inviteCodeRedisTemplate;
     private final InviteCodeGenerator inviteCodeGenerator;
+    private final InviteCodeDAO inviteCodeDAO;
 
     public String createInviteCode(CreateInviteCodeRequest createInviteCodeRequest) {
-        String generatedCode = inviteCodeGenerator.generate();
-        Instant now = Instant.now();
+        String code = inviteCodeGenerator.generate();
 
-        String key = "invite:code:" + generatedCode;
-        InviteCode inviteCode = new InviteCode(
-            generatedCode,
-            createInviteCodeRequest.getDescription(),
-            now.plus(7, ChronoUnit.DAYS)
-        );
-        Duration remaining = Duration.between(now, inviteCode.expiresAt());
+        CreateInviteCodeParam createInviteCodeParam = new CreateInviteCodeParam();
+        createInviteCodeParam.setCode(code);
+        createInviteCodeParam.setDescription(createInviteCodeRequest.getDescription());
+        createInviteCodeParam.setExpiresAt(Instant.now().plus(7, ChronoUnit.DAYS));
 
-        inviteCodeRedisTemplate.opsForValue().set(key, inviteCode, remaining);
-        return generatedCode;
+        inviteCodeDAO.insertInviteCode(createInviteCodeParam);
+
+        return code;
     }
 
-    public List<InviteCode> getInviteCodeList() {
-        Set<String> keys = inviteCodeRedisTemplate.keys("invite:code:*");
-        ArrayList<InviteCode> list = new ArrayList<>();
-        for (var key: keys) {
-            InviteCode inviteCode = inviteCodeRedisTemplate.opsForValue().get(key);
-            if (inviteCode != null) {
-                list.add(inviteCode);
-            }
-        }
-        return list;
+    public List<InviteCodeListItem> getInviteCodeList() {
+        return inviteCodeDAO.selectInviteCodes();
     }
 
     public InviteCode getAndDeleteInviteCode(String inviteCode) {
