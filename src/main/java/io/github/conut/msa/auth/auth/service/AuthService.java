@@ -14,8 +14,8 @@ import io.github.conut.msa.auth.auth.exception.CredentialNotActiveException;
 import io.github.conut.msa.auth.auth.exception.InvalidCredentialException;
 import io.github.conut.msa.auth.credential.dto.CredentialRow;
 import io.github.conut.msa.auth.credential.service.CredentialService;
+import io.github.conut.msa.auth.invite.row.InviteCodeRow;
 import io.github.conut.msa.auth.invite.service.InviteService;
-import io.github.conut.msa.auth.invite.vo.InviteCode;
 import io.github.conut.msa.auth.member.service.MemberService;
 import io.github.conut.msa.auth.refreshtoken.exception.RefreshTokenMissingException;
 import io.github.conut.msa.auth.refreshtoken.service.RefreshTokenService;
@@ -25,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
+    private final AuthTxService authTxService;
     private final AccessTokenService accessTokenService;
     private final RefreshTokenService refreshTokenService;
     private final CredentialService credentialService;
@@ -49,22 +50,15 @@ public class AuthService {
     }
 
     public void register(RegisterRequest registerRequest) {
-        InviteCode inviteCode = inviteService.getAndDeleteInviteCode(registerRequest.getInviteCode());
         String uuid = UUID.randomUUID().toString();
-        credentialService.insert(
-            uuid,
-            registerRequest.getUserid(),
-            passwordEncoder.encode(registerRequest.getPassword())
-        );
+        authTxService.createCredential(uuid, registerRequest);
+        InviteCodeRow inviteCode = inviteService.getInviteCode(registerRequest.getInviteCode());
         memberService.createMember(
             uuid,
             registerRequest.getNickname(),
-            inviteCode.description()
+            inviteCode.getDescription()
         );
-        int updated = credentialService.activateCredentialByUserUuid(uuid);
-        if (updated != 1) {
-            throw new IllegalStateException("Failed to activate credential for user UUID: " + uuid);
-        }
+        authTxService.activateCredential(uuid, inviteCode.getId());
     }
 
     public String refreshAccessToken(String refreshToken) {

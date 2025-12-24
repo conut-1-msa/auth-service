@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import io.github.conut.msa.auth.auth.exception.CredentialNotActiveException;
 import io.github.conut.msa.auth.auth.exception.InvalidCredentialException;
+import io.github.conut.msa.auth.auth.exception.InviteCodeRequiredException;
 
 @RestControllerAdvice
 public class AuthExceptionHandler {
@@ -44,6 +45,18 @@ public class AuthExceptionHandler {
                     "status", HttpStatus.INTERNAL_SERVER_ERROR.value(),
                     "error", "Internal Server Error",
                     "message", "Internal Server Error"
+                )
+            );
+    }
+
+    @ExceptionHandler(InviteCodeRequiredException.class)
+    public ResponseEntity<?> handleInviteCodeRequiredException(InviteCodeRequiredException exception) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+            .body(
+                Map.of(
+                    "status", HttpStatus.FORBIDDEN.value(),
+                    "error", "Forbidden",
+                    "message", exception.getMessage()
                 )
             );
     }

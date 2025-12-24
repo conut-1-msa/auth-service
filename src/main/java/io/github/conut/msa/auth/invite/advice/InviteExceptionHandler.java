@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import io.github.conut.msa.auth.invite.exception.InviteCodeNotFoundException;
+import io.github.conut.msa.auth.invite.exception.NoInviteCodeConsumedException;
 
 @RestControllerAdvice
 public class InviteExceptionHandler {
@@ -19,6 +20,18 @@ public class InviteExceptionHandler {
                     "status", HttpStatus.BAD_REQUEST.value(),
                     "error", "Bad Request",
                     "message", "Invalid invite code"
+                )
+            );
+    }
+
+    @ExceptionHandler(NoInviteCodeConsumedException.class)
+    public ResponseEntity<?> handleNoInviteCodeConsumedException(NoInviteCodeConsumedException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+            .body(
+                Map.of(
+                    "status", HttpStatus.CONFLICT.value(),
+                    "error", "Conflict",
+                    "message", "Invite code consumed"
                 )
             );
     }

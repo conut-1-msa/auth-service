@@ -21,4 +21,27 @@
         FROM invite_code
         ORDER BY id DESC
     </select>
+    <update id="reserveInviteCode">
+        UPDATE invite_code
+        SET status = 'RESERVED',
+            reserved_at = NOW(),
+            reserved_by = #{userUuid}
+        WHERE code = #{code}
+        AND status = 'UNUSED'
+        AND expires_at &gt; NOW()
+    </update>
+    <select id="selectInviteCodeByCode">
+        SELECT id, description
+        FROM invite_code
+        WHERE code = #{code}
+    </select>
+    <update id="consumeInviteCode">
+        UPDATE invite_code
+        SET status = 'CONSUMED',
+            consumed_at = NOW(),
+            consumed_by = #{userUuid}
+        WHERE id = #{id}
+        AND status = 'RESERVED'
+        AND reserved_by = #{userUuid}
+    </update>
 </mapper>

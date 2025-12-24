@@ -4,22 +4,23 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import io.github.conut.msa.auth.invite.dao.InviteCodeDAO;
+import io.github.conut.msa.auth.invite.dao.param.ConsumeInviteCodeParam;
 import io.github.conut.msa.auth.invite.dao.param.CreateInviteCodeParam;
+import io.github.conut.msa.auth.invite.dao.param.ReserveInviteCodeParam;
 import io.github.conut.msa.auth.invite.dto.CreateInviteCodeRequest;
 import io.github.conut.msa.auth.invite.exception.InviteCodeNotFoundException;
+import io.github.conut.msa.auth.invite.exception.NoInviteCodeConsumedException;
 import io.github.conut.msa.auth.invite.query.InviteCodeListItem;
+import io.github.conut.msa.auth.invite.row.InviteCodeRow;
 import io.github.conut.msa.auth.invite.util.InviteCodeGenerator;
-import io.github.conut.msa.auth.invite.vo.InviteCode;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class InviteService {
-    private final RedisTemplate<String, InviteCode> inviteCodeRedisTemplate;
     private final InviteCodeGenerator inviteCodeGenerator;
     private final InviteCodeDAO inviteCodeDAO;
 
@@ -40,12 +41,35 @@ public class InviteService {
         return inviteCodeDAO.selectInviteCodes();
     }
 
-    public InviteCode getAndDeleteInviteCode(String inviteCode) {
-        String key = "invite:code:" + inviteCode;
-        InviteCode inviteCodeValue = inviteCodeRedisTemplate.opsForValue().getAndDelete(key);
-        if (inviteCodeValue == null) {
+    public void reserveInviteCode(String code, String userUuid) {
+        ReserveInviteCodeParam param = new ReserveInviteCodeParam();
+        param.setCode(code);
+        param.setUserUuid(userUuid);
+
+        int result = inviteCodeDAO.reserveInviteCode(param);
+        if (result > 1) {
+            throw new IllegalStateException("Multiple invite code reserved for a single code: " + code);
+        }
+        if (result == 0) {
             throw new InviteCodeNotFoundException();
         }
-        return inviteCodeValue;
+    }
+
+    public InviteCodeRow getInviteCode(String code) {
+        return inviteCodeDAO.selectInviteCodeByCode(code);
+    }
+
+    public void consumeInviteCode(int id, String userUuid) {
+        ConsumeInviteCodeParam param = new ConsumeInviteCodeParam();
+        param.setId(id);
+        param.setUserUuid(userUuid);
+
+        int result = inviteCodeDAO.consumeInviteCode(param);
+        if (result > 1) {
+            throw new IllegalStateException("Multiple invite code consumed for a single id: " + id);
+        }
+        if (result == 0) {
+            throw new NoInviteCodeConsumedException();
+        }
     }
 }
