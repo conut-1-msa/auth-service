@@ -17,4 +17,5 @@ public interface InviteCodeDAO {
     int reserveInviteCode(ReserveInviteCodeParam reserveInviteCodeParam);
     InviteCodeRow selectInviteCodeByCode(String code);
     int consumeInviteCode(ConsumeInviteCodeParam consumeInviteCodeParam);
+    void releaseReservedInviteCodes();
 }

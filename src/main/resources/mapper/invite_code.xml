@@ -44,4 +44,12 @@
         AND status = 'RESERVED'
         AND reserved_by = #{userUuid}
     </update>
+    <update id="releaseReservedInviteCodes">
+        UPDATE invite_code
+        SET status = 'UNUSED',
+            reserved_at = NULL,
+            reserved_by = NULL
+        WHERE status = 'RESERVED'
+        AND reserved_at &lt; NOW() - INTERVAL 10 MINUTE
+    </update>
 </mapper>

@@ -72,4 +72,8 @@ public class InviteService {
             throw new NoInviteCodeConsumedException();
         }
     }
+
+    public void releaseReservedInviteCodes() {
+        inviteCodeDAO.releaseReservedInviteCodes();
+    }
 }
