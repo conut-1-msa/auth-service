@@ -19,6 +19,7 @@ import io.github.conut.msa.auth.auth.dto.AuthTokens;
 import io.github.conut.msa.auth.auth.dto.LoginRequest;
 import io.github.conut.msa.auth.auth.dto.RegisterRequest;
 import io.github.conut.msa.auth.auth.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -28,7 +29,7 @@ public class PublicAuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@RequestBody @Valid LoginRequest loginRequest) {
         AuthTokens authTokens = authService.login(loginRequest);
         ResponseCookie responseCookie = ResponseCookie.from("refreshToken", authTokens.getRefreshToken())
             .httpOnly(true)
@@ -48,7 +49,7 @@ public class PublicAuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<?> register(@RequestBody @Valid RegisterRequest registerRequest) {
         authService.register(registerRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
