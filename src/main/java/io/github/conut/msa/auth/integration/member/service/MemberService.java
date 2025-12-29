@@ -1,14 +1,14 @@
-package io.github.conut.msa.auth.member.service;
+package io.github.conut.msa.auth.integration.member.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import feign.RetryableException;
-import io.github.conut.msa.auth.member.client.MemberClient;
-import io.github.conut.msa.auth.member.dto.MemberCreateRequest;
-import io.github.conut.msa.auth.member.dto.MemberCreateResponse;
-import io.github.conut.msa.auth.member.exception.MemberServiceUnavailableException;
+import io.github.conut.msa.auth.integration.member.client.MemberClient;
+import io.github.conut.msa.auth.integration.member.dto.MemberCreateRequest;
+import io.github.conut.msa.auth.integration.member.dto.MemberCreateResponse;
+import io.github.conut.msa.auth.integration.member.exception.MemberServiceUnavailableException;
 import lombok.RequiredArgsConstructor;
 
 @Service

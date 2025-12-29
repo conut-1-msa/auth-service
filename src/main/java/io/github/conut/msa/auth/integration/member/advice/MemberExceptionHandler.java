@@ -1,4 +1,4 @@
-package io.github.conut.msa.auth.member.advice;
+package io.github.conut.msa.auth.integration.member.advice;
 
 import java.util.Map;
 
@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import io.github.conut.msa.auth.member.exception.MemberServiceUnavailableException;
+import io.github.conut.msa.auth.integration.member.exception.MemberServiceUnavailableException;
 
 @RestControllerAdvice
 public class MemberExceptionHandler {

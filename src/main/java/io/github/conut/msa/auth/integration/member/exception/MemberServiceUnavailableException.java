@@ -1,4 +1,4 @@
-package io.github.conut.msa.auth.member.exception;
+package io.github.conut.msa.auth.integration.member.exception;
 
 public class MemberServiceUnavailableException extends RuntimeException {
     public MemberServiceUnavailableException(Throwable cause) {

@@ -1,4 +1,4 @@
-package io.github.conut.msa.auth.member.client;
+package io.github.conut.msa.auth.integration.member.client;
 
 import java.util.List;
 
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-import io.github.conut.msa.auth.member.dto.MemberCreateRequest;
-import io.github.conut.msa.auth.member.dto.MemberCreateResponse;
+import io.github.conut.msa.auth.integration.member.dto.MemberCreateRequest;
+import io.github.conut.msa.auth.integration.member.dto.MemberCreateResponse;
 
 @FeignClient(name = "member-service", url = "${services.member.url:}")
 public interface MemberClient {
