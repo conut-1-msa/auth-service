@@ -1,4 +1,4 @@
-package io.github.conut.msa.auth.integration.member.client;
+package io.github.conut.msa.auth.integration.member.feign;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import io.github.conut.msa.auth.integration.member.dto.MemberCreateRequest;
 import io.github.conut.msa.auth.integration.member.dto.MemberCreateResponse;
 
 @FeignClient(name = "member-service", url = "${services.member.url:}")
-public interface MemberClient {
+public interface MemberFeignClient {
     @PostMapping("/internal/member")
     MemberCreateResponse createMember(@RequestBody MemberCreateRequest memberCreateRequest);
 
