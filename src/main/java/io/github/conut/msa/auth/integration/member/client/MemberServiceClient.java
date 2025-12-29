@@ -1,4 +1,4 @@
-package io.github.conut.msa.auth.integration.member.service;
+package io.github.conut.msa.auth.integration.member.client;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class MemberService {
+public class MemberServiceClient {
     private final MemberFeignClient memberFeignClient;
 
     public MemberCreateResponse createMember(String uuid, String nickname, String description) {

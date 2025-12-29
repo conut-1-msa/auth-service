@@ -14,7 +14,7 @@ import io.github.conut.msa.auth.auth.exception.CredentialNotActiveException;
 import io.github.conut.msa.auth.auth.exception.InvalidCredentialException;
 import io.github.conut.msa.auth.credential.dto.CredentialRow;
 import io.github.conut.msa.auth.credential.service.CredentialService;
-import io.github.conut.msa.auth.integration.member.service.MemberService;
+import io.github.conut.msa.auth.integration.member.client.MemberServiceClient;
 import io.github.conut.msa.auth.invite.row.InviteCodeRow;
 import io.github.conut.msa.auth.invite.service.InviteService;
 import io.github.conut.msa.auth.refreshtoken.exception.RefreshTokenMissingException;
@@ -29,7 +29,7 @@ public class AuthService {
     private final AccessTokenService accessTokenService;
     private final RefreshTokenService refreshTokenService;
     private final CredentialService credentialService;
-    private final MemberService memberService;
+    private final MemberServiceClient memberServiceClient;
     private final InviteService inviteService;
     private final PasswordEncoder passwordEncoder;
 
@@ -39,7 +39,7 @@ public class AuthService {
             throw new InvalidCredentialException();
         }
         AuthTokens authTokens = new AuthTokens();
-        List<String> roles = memberService.getMemberRoles(credentialRow.getUserUuid());
+        List<String> roles = memberServiceClient.getMemberRoles(credentialRow.getUserUuid());
         authTokens.setAccessToken(accessTokenService.generateAccessToken(credentialRow.getUserUuid(), roles));
         authTokens.setRefreshToken(refreshTokenService.generateRefreshToken(credentialRow.getUserUuid()));
         return authTokens;
@@ -53,7 +53,7 @@ public class AuthService {
         String uuid = UUID.randomUUID().toString();
         authTxService.createCredential(uuid, registerRequest);
         InviteCodeRow inviteCode = inviteService.getInviteCode(registerRequest.getInviteCode());
-        memberService.createMember(
+        memberServiceClient.createMember(
             uuid,
             registerRequest.getNickname(),
             inviteCode.getDescription()
@@ -70,7 +70,7 @@ public class AuthService {
         if (!credentialService.isActive(uuid)) {
             throw new CredentialNotActiveException();
         }
-        List<String> roles = memberService.getMemberRoles(uuid);
+        List<String> roles = memberServiceClient.getMemberRoles(uuid);
         return accessTokenService.generateAccessToken(uuid, roles);
     }
 }
