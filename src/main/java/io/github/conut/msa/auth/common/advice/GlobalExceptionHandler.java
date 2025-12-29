@@ -1,4 +1,4 @@
-package io.github.conut.msa.auth.integration.member.advice;
+package io.github.conut.msa.auth.common.advice;
 
 import java.util.Map;
 
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import io.github.conut.msa.auth.integration.member.exception.MemberServiceUnavailableException;
 
 @RestControllerAdvice
-public class MemberExceptionHandler {
+public class GlobalExceptionHandler {
     @ExceptionHandler(MemberServiceUnavailableException.class)
     public ResponseEntity<?> handleMemberServiceUnavailableException(MemberServiceUnavailableException exception) {
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
