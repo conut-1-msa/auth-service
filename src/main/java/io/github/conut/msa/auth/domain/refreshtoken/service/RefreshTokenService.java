@@ -1,0 +1,34 @@
+package io.github.conut.msa.auth.domain.refreshtoken.service;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import io.github.conut.msa.auth.common.util.JwtUtil;
+import io.jsonwebtoken.Claims;
+
+@Service
+public class RefreshTokenService {
+    private final JwtUtil jwtUtil;
+
+    public RefreshTokenService(@Qualifier("refreshJwtUtil") JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
+
+    public String generateRefreshToken(String userUuid) {
+        Map<String ,Object> claims = Map.of(
+            "uuid", userUuid
+        );
+        Date twoWeeksLater = Date.from(Instant.now().plus(14, ChronoUnit.DAYS));
+
+        return jwtUtil.generateToken(claims, twoWeeksLater);
+    }
+
+    public Claims parseRefreshToken(String refreshToken) {
+        return jwtUtil.parseToken(refreshToken);
+    }
+}

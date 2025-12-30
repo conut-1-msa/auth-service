@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.support.TestPropertySourceUtils;
 
 import io.github.conut.msa.auth.common.util.JwtUtil;
+import io.github.conut.msa.auth.domain.accesstoken.config.AccessJwtConfig;
 
 @SpringBootTest(classes = AccessJwtConfig.class)
 @ActiveProfiles("test")
