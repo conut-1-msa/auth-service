@@ -2,7 +2,7 @@ package io.github.conut.msa.auth.integration.member.client;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import feign.RetryableException;
 import io.github.conut.msa.auth.integration.member.dto.MemberCreateRequest;
@@ -11,7 +11,7 @@ import io.github.conut.msa.auth.integration.member.exception.MemberServiceUnavai
 import io.github.conut.msa.auth.integration.member.feign.MemberFeignClient;
 import lombok.RequiredArgsConstructor;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class MemberServiceClient {
     private final MemberFeignClient memberFeignClient;
