@@ -3,7 +3,7 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="io.github.conut.msa.auth.invite.dao.InviteCodeDAO">
+<mapper namespace="io.github.conut.msa.auth.domain.invite.dao.InviteCodeDAO">
     <insert id="insertInviteCode">
         INSERT INTO invite_code (code, description, expires_at)
         VALUES (#{code}, #{description}, #{expiresAt})
